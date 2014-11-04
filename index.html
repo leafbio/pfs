@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Pfs : A distributed filesystem for a Dockerized world.">
+    <meta name="description" content="pfs : A distributed filesystem for a Dockerized world.">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Pfs</title>
+    <title>pfs</title>
   </head>
 
   <body>
@@ -18,7 +18,7 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/pachyderm-io/pfs">View on GitHub</a>
 
-          <h1 id="project_title">Pfs</h1>
+          <h1 id="project_title">pfs</h1>
           <h2 id="project_tagline">A distributed filesystem for a Dockerized world.</h2>
 
             <section id="downloads">
@@ -32,10 +32,10 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="pachyderm-file-system" class="anchor" href="#pachyderm-file-system"><span class="octicon octicon-link"></span></a>Pachyderm File System</h1>
+<a id="pachyderm-file-system" class="anchor" href="#pachyderm-file-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pachyderm File System</h1>
 
 <h2>
-<a name="what-is-pfs" class="anchor" href="#what-is-pfs"><span class="octicon octicon-link"></span></a>What is pfs?</h2>
+<a id="what-is-pfs" class="anchor" href="#what-is-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is pfs?</h2>
 
 <p>Pfs is a distributed filesystem for large scale data processing similar to
 HDFS.  It's designed to integrate painlessly into a Docker stack by using
@@ -45,7 +45,7 @@ filesystem that powers Docker itself) to offer cluster wide filesystem
 snapshotting.</p>
 
 <h2>
-<a name="key-features" class="anchor" href="#key-features"><span class="octicon octicon-link"></span></a>Key Features</h2>
+<a id="key-features" class="anchor" href="#key-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Key Features</h2>
 
 <ul>
 <li>Fault tolerant system built around CoreOS primitives (implemented)</li>
@@ -55,24 +55,27 @@ snapshotting.</p>
 </ul>
 
 <h2>
-<a name="is-pfs-production-ready" class="anchor" href="#is-pfs-production-ready"><span class="octicon octicon-link"></span></a>Is pfs production ready</h2>
+<a id="is-pfs-production-ready" class="anchor" href="#is-pfs-production-ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Is pfs production ready</h2>
 
 <p>Absolutely not, pfs has only recently hit MVP status.</p>
 
 <h2>
-<a name="quickstart-guide" class="anchor" href="#quickstart-guide"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
+<a id="quickstart-guide" class="anchor" href="#quickstart-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
 
 <h3>
-<a name="creating-a-coreos-cluster" class="anchor" href="#creating-a-coreos-cluster"><span class="octicon octicon-link"></span></a>Creating a CoreOS cluster</h3>
+<a id="creating-a-coreos-cluster" class="anchor" href="#creating-a-coreos-cluster" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a CoreOS cluster</h3>
 
 <p>Pfs is designed to run on CoreOS. To start you'll need a working CoreOS
-cluster.</p>
+cluster. Currently global containers, which are required by pfs, are only
+available in the beta channel (CoreOS 444.5.0.)</p>
 
-<p>Google Compute Engine (recommended): [<a href="https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a>]
-Amazon EC2: [<a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a>]</p>
+<ul>
+<li>Google Compute Engine (recommended): [<a href="https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a>]</li>
+<li>Amazon EC2: [<a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a>]</li>
+</ul>
 
 <h3>
-<a name="deploy-pfs" class="anchor" href="#deploy-pfs"><span class="octicon octicon-link"></span></a>Deploy pfs</h3>
+<a id="deploy-pfs" class="anchor" href="#deploy-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deploy pfs</h3>
 
 <p>SSH in to one of your new machines CoreOS machines.</p>
 
@@ -86,7 +89,7 @@ Amazon EC2: [<a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2
 each node has to pull a Docker image.</p>
 
 <h3>
-<a name="checking-the-status-of-your-deploy" class="anchor" href="#checking-the-status-of-your-deploy"><span class="octicon octicon-link"></span></a>Checking the status of your deploy</h3>
+<a id="checking-the-status-of-your-deploy" class="anchor" href="#checking-the-status-of-your-deploy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Checking the status of your deploy</h3>
 
 <p>The easiest way to see what's going on in your cluster is to use <code>list-units</code></p>
 
@@ -113,32 +116,32 @@ router.service                  f652105a.../10.240.229.124      active  running
 </code></pre>
 
 <h3>
-<a name="using-pfs" class="anchor" href="#using-pfs"><span class="octicon octicon-link"></span></a>Using pfs</h3>
+<a id="using-pfs" class="anchor" href="#using-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using pfs</h3>
 
 <p>Pfs exposes a git like interface to the file system:</p>
 
 <h4>
-<a name="creating-a-file" class="anchor" href="#creating-a-file"><span class="octicon octicon-link"></span></a>Creating a file</h4>
+<a id="creating-a-file" class="anchor" href="#creating-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a file</h4>
 
 <p><code>$ curl -XPOST localhost/pfs/file_name -d @local_file</code></p>
 
 <h4>
-<a name="read-a-file" class="anchor" href="#read-a-file"><span class="octicon octicon-link"></span></a>Read a file</h4>
+<a id="read-a-file" class="anchor" href="#read-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Read a file</h4>
 
 <p><code>$ curl localhost/pfs/file_name</code></p>
 
 <h4>
-<a name="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h4>
+<a id="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h4>
 
 <p><code>$ curl -XPUT localhost/pfs/file_name -d @local_file</code></p>
 
 <h4>
-<a name="deleting-a-file" class="anchor" href="#deleting-a-file"><span class="octicon octicon-link"></span></a>Deleting a file</h4>
+<a id="deleting-a-file" class="anchor" href="#deleting-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting a file</h4>
 
 <p><code>$ curl -XDELETE localhost/pfs/file_name</code></p>
 
 <h4>
-<a name="committing-changes" class="anchor" href="#committing-changes"><span class="octicon octicon-link"></span></a>Committing changes</h4>
+<a id="committing-changes" class="anchor" href="#committing-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Committing changes</h4>
 
 <p><code>$ curl localhost/commit</code></p>
 
@@ -146,7 +149,7 @@ router.service                  f652105a.../10.240.229.124      active  running
 pushes it to replicas. Where it remains accessible by commit id.</p>
 
 <h3>
-<a name="accessing-previous-commits" class="anchor" href="#accessing-previous-commits"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
+<a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
 
 <p><code>$ curl localhost/pfs/file_name?commit=n</code></p>
       </section>
@@ -155,7 +158,7 @@ pushes it to replicas. Where it remains accessible by commit id.</p>
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Pfs maintained by <a href="https://github.com/pachyderm-io">pachyderm-io</a></p>
+        <p class="copyright">pfs maintained by <a href="https://github.com/pachyderm-io">pachyderm-io</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
