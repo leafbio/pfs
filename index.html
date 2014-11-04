@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Pfs : A distributed filesystem for the Dockerized world.">
+    <meta name="description" content="Pfs : A distributed filesystem for a Dockerized world.">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/pachyderm-io/pfs">View on GitHub</a>
 
           <h1 id="project_title">Pfs</h1>
-          <h2 id="project_tagline">A distributed filesystem for the Dockerized world.</h2>
+          <h2 id="project_tagline">A distributed filesystem for a Dockerized world.</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/pachyderm-io/pfs/zipball/master">Download this project as a .zip file</a>
@@ -55,7 +55,15 @@ snapshotting.</p>
 </ul>
 
 <h2>
-<a name="creating-a-coreos-cluster" class="anchor" href="#creating-a-coreos-cluster"><span class="octicon octicon-link"></span></a>Creating a CoreOS cluster</h2>
+<a name="is-pfs-production-ready" class="anchor" href="#is-pfs-production-ready"><span class="octicon octicon-link"></span></a>Is pfs production ready</h2>
+
+<p>Absolutely not, pfs has only recently hit MVP status.</p>
+
+<h2>
+<a name="quickstart-guide" class="anchor" href="#quickstart-guide"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
+
+<h3>
+<a name="creating-a-coreos-cluster" class="anchor" href="#creating-a-coreos-cluster"><span class="octicon octicon-link"></span></a>Creating a CoreOS cluster</h3>
 
 <p>Pfs is designed to run on CoreOS. To start you'll need a working CoreOS
 cluster.</p>
@@ -63,8 +71,8 @@ cluster.</p>
 <p>Google Compute Engine (recommended): [<a href="https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a>]
 Amazon EC2: [<a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a>]</p>
 
-<h2>
-<a name="deploy-pfs" class="anchor" href="#deploy-pfs"><span class="octicon octicon-link"></span></a>Deploy pfs</h2>
+<h3>
+<a name="deploy-pfs" class="anchor" href="#deploy-pfs"><span class="octicon octicon-link"></span></a>Deploy pfs</h3>
 
 <p>SSH in to one of your new machines CoreOS machines.</p>
 
@@ -77,8 +85,8 @@ Amazon EC2: [<a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2
 <p>The startup process takes a little while the first time your run it because
 each node has to pull a Docker image.</p>
 
-<h2>
-<a name="checking-the-status-of-your-deploy" class="anchor" href="#checking-the-status-of-your-deploy"><span class="octicon octicon-link"></span></a>Checking the status of your deploy</h2>
+<h3>
+<a name="checking-the-status-of-your-deploy" class="anchor" href="#checking-the-status-of-your-deploy"><span class="octicon octicon-link"></span></a>Checking the status of your deploy</h3>
 
 <p>The easiest way to see what's going on in your cluster is to use <code>list-units</code></p>
 
@@ -104,33 +112,33 @@ router.service                  3817102d.../10.240.199.203      active  running
 router.service                  f652105a.../10.240.229.124      active  running
 </code></pre>
 
-<h2>
-<a name="using-pfs" class="anchor" href="#using-pfs"><span class="octicon octicon-link"></span></a>Using pfs</h2>
+<h3>
+<a name="using-pfs" class="anchor" href="#using-pfs"><span class="octicon octicon-link"></span></a>Using pfs</h3>
 
 <p>Pfs exposes a git like interface to the file system:</p>
 
-<h3>
-<a name="creating-a-file" class="anchor" href="#creating-a-file"><span class="octicon octicon-link"></span></a>Creating a file</h3>
+<h4>
+<a name="creating-a-file" class="anchor" href="#creating-a-file"><span class="octicon octicon-link"></span></a>Creating a file</h4>
 
 <p><code>$ curl -XPOST localhost/pfs/file_name -d @local_file</code></p>
 
-<h3>
-<a name="read-a-file" class="anchor" href="#read-a-file"><span class="octicon octicon-link"></span></a>Read a file</h3>
+<h4>
+<a name="read-a-file" class="anchor" href="#read-a-file"><span class="octicon octicon-link"></span></a>Read a file</h4>
 
 <p><code>$ curl localhost/pfs/file_name</code></p>
 
-<h3>
-<a name="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h3>
+<h4>
+<a name="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h4>
 
 <p><code>$ curl -XPUT localhost/pfs/file_name -d @local_file</code></p>
 
-<h3>
-<a name="deleting-a-file" class="anchor" href="#deleting-a-file"><span class="octicon octicon-link"></span></a>Deleting a file</h3>
+<h4>
+<a name="deleting-a-file" class="anchor" href="#deleting-a-file"><span class="octicon octicon-link"></span></a>Deleting a file</h4>
 
 <p><code>$ curl -XDELETE localhost/pfs/file_name</code></p>
 
-<h3>
-<a name="committing-changes" class="anchor" href="#committing-changes"><span class="octicon octicon-link"></span></a>Committing changes</h3>
+<h4>
+<a name="committing-changes" class="anchor" href="#committing-changes"><span class="octicon octicon-link"></span></a>Committing changes</h4>
 
 <p><code>$ curl localhost/commit</code></p>
 
