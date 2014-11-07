@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="pfs : A distributed filesystem for a Dockerized world.">
+    <meta name="description" content="pfs : A Dockerized distributed filesystem.">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/pachyderm-io/pfs">View on GitHub</a>
 
           <h1 id="project_title">pfs</h1>
-          <h2 id="project_tagline">A distributed filesystem for a Dockerized world.</h2>
+          <h2 id="project_tagline">A Dockerized distributed filesystem.</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/pachyderm-io/pfs/zipball/master">Download this project as a .zip file</a>
@@ -101,7 +101,7 @@ each node has to pull a Docker image.</p>
 
 <p>The easiest way to see what's going on in your cluster is to use <code>list-units</code></p>
 
-<p><code>$ fleetctl list-units</code></p>
+<div class="highlight highlight-shell"><pre>$ fleetctl list-units</pre></div>
 
 <p>If things are working correctly you should see something like:</p>
 
@@ -121,27 +121,27 @@ router.service                  3817102d.../10.240.199.203      active  running
 <h4>
 <a id="creating-a-file" class="anchor" href="#creating-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a file</h4>
 
-<p><code>$ curl -XPOST localhost/pfs/file_name -d @local_file</code></p>
+<div class="highlight highlight-shell"><pre>$ curl -XPOST localhost/pfs/file_name -d @local_file</pre></div>
 
 <h4>
 <a id="read-a-file" class="anchor" href="#read-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Read a file</h4>
 
-<p><code>$ curl localhost/pfs/file_name</code></p>
+<div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name</pre></div>
 
 <h4>
 <a id="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h4>
 
-<p><code>$ curl -XPUT localhost/pfs/file_name -d @local_file</code></p>
+<div class="highlight highlight-shell"><pre>$ curl -XPUT localhost/pfs/file_name -d @local_file</pre></div>
 
 <h4>
 <a id="deleting-a-file" class="anchor" href="#deleting-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting a file</h4>
 
-<p><code>$ curl -XDELETE localhost/pfs/file_name</code></p>
+<div class="highlight highlight-shell"><pre>$ curl -XDELETE localhost/pfs/file_name</pre></div>
 
 <h4>
 <a id="committing-changes" class="anchor" href="#committing-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Committing changes</h4>
 
-<p><code>$ curl localhost/commit</code></p>
+<div class="highlight highlight-shell"><pre>$ curl localhost/commit</pre></div>
 
 <p>Committing in pfs creates a lightweight snapshot of the file system state and
 pushes it to replicas. Where it remains accessible by commit id.</p>
@@ -149,7 +149,7 @@ pushes it to replicas. Where it remains accessible by commit id.</p>
 <h3>
 <a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
 
-<p><code>$ curl localhost/pfs/file_name?commit=n</code></p>
+<div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name<span class="o">?</span>commit=n</pre></div>
 
 <h2>
 <a id="what-is-a-git-like-filesystem" class="anchor" href="#what-is-a-git-like-filesystem" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a git like filesystem?</h2>
@@ -180,8 +180,9 @@ to chat: <a href="mailto:joey.zwicker@gmail.com">joey.zwicker@gmail.com</a> <a h
 <h2>
 <a id="how-do-i-hack-on-pfs" class="anchor" href="#how-do-i-hack-on-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>How do I hack on pfs?</h2>
 
-<p>Pfs' only dependency is Docker. You can build it like so:
-<code>pfs$ docker build -t username/pfs .</code></p>
+<p>Pfs' only dependency is Docker. You can build it like so:</p>
+
+<div class="highlight highlight-shell"><pre>pfs$ docker build -t username/pfs <span class="nf">.</span></pre></div>
 
 <p>Deploying what you build requires pushing the built container to the central
 Docker registry and changing the container name in the .service files from
