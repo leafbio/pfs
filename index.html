@@ -37,27 +37,33 @@
 <h2>
 <a id="what-is-pfs" class="anchor" href="#what-is-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is pfs?</h2>
 
-<p>Pfs is a distributed filesystem for large scale data processing similar to
-HDFS.  It's designed to integrate painlessly into a Docker stack by using
-containers itself for deployment and by letting users specify distributed
-computations as containers. Furthermore pfs leverage  btrfs (the same
-filesystem that powers Docker itself) to offer cluster wide filesystem
-snapshotting.</p>
+<p>Pfs is an HDFS alternative built specifically for the Docker ecosystem.
+You deploy it with Docker, just like everything else in your stack.
+Furthermore, MapReduce jobs are specified as Docker containers, rather than
+.jars, letting you perform distributed computation using any tools you want.</p>
 
 <h2>
 <a id="key-features" class="anchor" href="#key-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Key Features</h2>
 
 <ul>
-<li>Fault tolerant system built around CoreOS primitives (implemented)</li>
-<li>Rich commit history (implemented)</li>
-<li>Branching (not implemented)</li>
+<li>Fault tolerant architecture built of CoreOS primitives</li>
+<li>Git like distributed filesystem</li>
 <li>Dockerized Map Reduce (not implemented)</li>
 </ul>
 
 <h2>
 <a id="is-pfs-production-ready" class="anchor" href="#is-pfs-production-ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Is pfs production ready</h2>
 
-<p>Absolutely not, pfs has only recently hit MVP status.</p>
+<p>No, pfs is at Alpha status.</p>
+
+<h2>
+<a id="where-is-this-project-going" class="anchor" href="#where-is-this-project-going" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where is this project going?</h2>
+
+<p>Long term Pachyderm's goal is to be a viable alternative to Hadoop built on top
+of a modern distributed computing toolchain. Hadoop is a mature product so
+there's a great deal of work to be done to match its feature set. However we're
+finding that thanks to innovative tools like btrfs, Docker and CoreOS we can
+build more functionality with less code than was possible 10 years ago.</p>
 
 <h2>
 <a id="quickstart-guide" class="anchor" href="#quickstart-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
@@ -70,8 +76,10 @@ cluster. Currently global containers, which are required by pfs, are only
 available in the beta channel (CoreOS 444.5.0.)</p>
 
 <ul>
-<li>Google Compute Engine (recommended): [<a href="https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a>]</li>
-<li>Amazon EC2: [<a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a>]</li>
+<li>
+<a href="Vagrant">https://coreos.com/docs/running-coreos/platforms/vagrant/</a> (reccommended)</li>
+<li><a href="Google%20Compute%20Engine">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a></li>
+<li><a href="Amazon%20EC2">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a></li>
 </ul>
 
 <h3>
@@ -79,11 +87,11 @@ available in the beta channel (CoreOS 444.5.0.)</p>
 
 <p>SSH in to one of your new machines CoreOS machines.</p>
 
-<p><code>$ wget https://github.com/pachyderm-io/pfs/raw/master/deploy/static/3Node.tar.gz</code></p>
+<p><code>$ wget https://github.com/pachyderm-io/pfs/raw/master/deploy/static/1Node.tar.gz</code></p>
 
-<p><code>$ tar -xvf 3Node.tar.gz</code></p>
+<p><code>$ tar -xvf 1Node.tar.gz</code></p>
 
-<p><code>$ fleetctl start 3Node/*</code></p>
+<p><code>$ fleetctl start 1Node/*</code></p>
 
 <p>The startup process takes a little while the first time your run it because
 each node has to pull a Docker image.</p>
@@ -98,21 +106,11 @@ each node has to pull a Docker image.</p>
 <p>If things are working correctly you should see something like:</p>
 
 <pre><code>UNIT                            MACHINE                         ACTIVE  SUB
-announce-master-0-3.service     3817102d.../10.240.199.203      active  running
-announce-master-1-3.service     06c6dba9.../10.240.177.113      active  running
-announce-master-2-3.service     3817102d.../10.240.199.203      active  running
-announce-replica-0-3.service    f652105a.../10.240.229.124      active  running
-announce-replica-1-3.service    06c6dba9.../10.240.177.113      active  running
-announce-replica-2-3.service    f652105a.../10.240.229.124      active  running
-master-0-3.service              3817102d.../10.240.199.203      active  running
-master-1-3.service              06c6dba9.../10.240.177.113      active  running
-master-2-3.service              3817102d.../10.240.199.203      active  running
-replica-0-3.service             f652105a.../10.240.229.124      active  running
-replica-1-3.service             06c6dba9.../10.240.177.113      active  running
-replica-2-3.service             f652105a.../10.240.229.124      active  running
-router.service                  06c6dba9.../10.240.177.113      active  running
+announce-master-0-1.service     3817102d.../10.240.199.203      active  running
+announce-replica-0-1.service    3817102d.../10.240.199.203      active  running
+master-0-1.service              3817102d.../10.240.199.203      active  running
+replica-0-1.service             3817102d.../10.240.199.203      active  running
 router.service                  3817102d.../10.240.199.203      active  running
-router.service                  f652105a.../10.240.229.124      active  running
 </code></pre>
 
 <h3>
@@ -152,6 +150,42 @@ pushes it to replicas. Where it remains accessible by commit id.</p>
 <a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
 
 <p><code>$ curl localhost/pfs/file_name?commit=n</code></p>
+
+<h2>
+<a id="what-is-a-git-like-filesystem" class="anchor" href="#what-is-a-git-like-filesystem" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a git like filesystem?</h2>
+
+<p>Pfs is implemented as a distributed layer on top of btrfs, the same
+copy-on-write(CoW) filesystem that powers Docker. A distributed layer that
+horizontally scales btrfs' existing
+<a href="git-like">http://zef.me/6023/who-needs-git-when-you-got-zfs/</a> semantics to
+datacenter scale datasets. Pfs brings features like commit based history and
+branching, standard primitives for collaborating on code, data engineering.</p>
+
+<h2>
+<a id="what-is-dockerized-mapreduce" class="anchor" href="#what-is-dockerized-mapreduce" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is "Dockerized MapReduce?"</h2>
+
+<p>The basic interface for MapReduce is a <code>map</code> function and a <code>reduce</code> function.
+In Hadoop this is exposed as a Java interface. In Pachyderm MapReduce jobs are
+user submitted Docker containers with http servers inside them. Rather than
+calling a <code>map</code> method on a class Pachyderm POSTs files to the <code>/map</code> route on
+a webserver. This completely democratizes MapReduce by decoupling it from a
+single platform such as the JVM.</p>
+
+<h2>
+<a id="whos-building-this" class="anchor" href="#whos-building-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>Who's building this?</h2>
+
+<p>2 guys who love data and communities. Both of whome are named Joe. We'd love
+to chat: <a href="mailto:joey.zwicker@gmail.com">joey.zwicker@gmail.com</a> <a href="mailto:jdoliner@gmail.com">jdoliner@gmail.com</a>.</p>
+
+<h2>
+<a id="how-do-i-hack-on-pfs" class="anchor" href="#how-do-i-hack-on-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>How do I hack on pfs?</h2>
+
+<p>Pfs' only dependency is Docker. You can build it like so:
+<code>pfs$ docker build -t username/pfs .</code></p>
+
+<p>Deploying what you build requires pushing the built container to the central
+Docker registry and changing the container name in the .service files from
+<code>pachyderm/pfs</code> to <code>username/pfs</code>.</p>
       </section>
     </div>
 
