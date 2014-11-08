@@ -38,7 +38,7 @@
 <a id="what-is-pfs" class="anchor" href="#what-is-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is pfs?</h2>
 
 <p>Pfs is a distributed file system built specifically for the Docker
-ecosystem. You <a href="deploy%20it%20with%20Docker">https://registry.hub.docker.com/u/pachyderm/pfs/</a>,
+ecosystem. You <a href="https://registry.hub.docker.com/u/pachyderm/pfs/">deploy it with Docker</a>,
 just like other applications in your stack. Furthermore,
 MapReduce jobs are specified as Docker containers, rather than .jars,
 letting you perform distributed computation using any tools you want.</p>
@@ -49,7 +49,7 @@ letting you perform distributed computation using any tools you want.</p>
 <p><em>TODO</em> make these clickable to lower sections</p>
 
 <ul>
-<li>Fault-tolerant architecture built on <a href="CoreOS">https://coreos.com</a> (implemented)</li>
+<li>Fault-tolerant architecture built on <a href="https://coreos.com">CoreOS</a> (implemented)</li>
 <li>Git-like distributed file system (implemented)</li>
 <li>Dockerized MapReduce (not implemented)</li>
 </ul>
@@ -74,7 +74,7 @@ build more functionality with less code than was possible 10 years ago.</p>
 <p>Pfs is implemented as a distributed layer on top of btrfs, the same
 copy-on-write(CoW) filesystem that powers Docker. A distributed layer that
 horizontally scales btrfs' existing
-<a href="git-like">http://zef.me/6023/who-needs-git-when-you-got-zfs/</a> semantics to
+<a href="http://zef.me/6023/who-needs-git-when-you-got-zfs/">git-like</a> semantics to
 datacenter scale datasets. Pfs brings features like commit based history and
 branching, standard primitives for collaborating on code, data engineering.</p>
 
@@ -100,9 +100,9 @@ available in the beta channel (CoreOS 444.5.0.)</p>
 
 <ul>
 <li>
-<a href="Vagrant">https://coreos.com/docs/running-coreos/platforms/vagrant/</a> (reccommended)</li>
-<li><a href="Google%20Compute%20Engine">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a></li>
-<li><a href="Amazon%20EC2">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a></li>
+<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">Vagrant</a> (reccommended)</li>
+<li><a href="https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/">Google Compute Engine</a></li>
+<li><a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">Amazon EC2</a></li>
 </ul>
 
 <h3>
