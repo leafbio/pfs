@@ -37,18 +37,20 @@
 <h2>
 <a id="what-is-pfs" class="anchor" href="#what-is-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is pfs?</h2>
 
-<p>Pfs is an HDFS alternative built specifically for the Docker ecosystem.
-You deploy it with Docker, just like everything else in your stack.
-Furthermore, MapReduce jobs are specified as Docker containers, rather than
-.jars, letting you perform distributed computation using any tools you want.</p>
+<p>Pfs is a distributed file system alternative built specifically for the Docker
+ecosystem. You <a href="deploy%20it%0Awith%20Docker">https://registry.hub.docker.com/u/pachyderm/pfs/</a>, just like other applications in your stack. Furthermore,
+MapReduce jobs are specified as Docker containers, rather than .jars,
+letting you perform distributed computation using any tools you want.</p>
 
 <h2>
 <a id="key-features" class="anchor" href="#key-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Key Features</h2>
 
+<p><em>TODO</em> make these clickable to lower sections</p>
+
 <ul>
-<li>Fault tolerant architecture built of CoreOS primitives</li>
-<li>Git like distributed filesystem</li>
-<li>Dockerized Map Reduce (not implemented)</li>
+<li>Fault-tolerant architecture built on <a href="CoreOS">https://coreos.com</a> (implemented)</li>
+<li>Git-like distributed file system (implemented)</li>
+<li>Dockerized MapReduce (not implemented)</li>
 </ul>
 
 <h2>
@@ -64,6 +66,26 @@ of a modern distributed computing toolchain. Hadoop is a mature product so
 there's a great deal of work to be done to match its feature set. However we're
 finding that thanks to innovative tools like btrfs, Docker and CoreOS we can
 build more functionality with less code than was possible 10 years ago.</p>
+
+<h2>
+<a id="what-is-a-git-like-file-system" class="anchor" href="#what-is-a-git-like-file-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a git-like file system?</h2>
+
+<p>Pfs is implemented as a distributed layer on top of btrfs, the same
+copy-on-write(CoW) filesystem that powers Docker. A distributed layer that
+horizontally scales btrfs' existing
+<a href="git-like">http://zef.me/6023/who-needs-git-when-you-got-zfs/</a> semantics to
+datacenter scale datasets. Pfs brings features like commit based history and
+branching, standard primitives for collaborating on code, data engineering.</p>
+
+<h2>
+<a id="what-is-dockerized-mapreduce" class="anchor" href="#what-is-dockerized-mapreduce" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is "dockerized MapReduce?"</h2>
+
+<p>The basic interface for MapReduce is a <code>map</code> function and a <code>reduce</code> function.
+In Hadoop this is exposed as a Java interface. In Pachyderm MapReduce jobs are
+user submitted Docker containers with http servers inside them. Rather than
+calling a <code>map</code> method on a class Pachyderm POSTs files to the <code>/map</code> route on
+a webserver. This completely democratizes MapReduce by decoupling it from a
+single platform such as the JVM.</p>
 
 <h2>
 <a id="quickstart-guide" class="anchor" href="#quickstart-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
@@ -150,26 +172,6 @@ pushes it to replicas. Where it remains accessible by commit id.</p>
 <a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
 
 <div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name<span class="o">?</span>commit=n</pre></div>
-
-<h2>
-<a id="what-is-a-git-like-filesystem" class="anchor" href="#what-is-a-git-like-filesystem" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a git like filesystem?</h2>
-
-<p>Pfs is implemented as a distributed layer on top of btrfs, the same
-copy-on-write(CoW) filesystem that powers Docker. A distributed layer that
-horizontally scales btrfs' existing
-<a href="git-like">http://zef.me/6023/who-needs-git-when-you-got-zfs/</a> semantics to
-datacenter scale datasets. Pfs brings features like commit based history and
-branching, standard primitives for collaborating on code, data engineering.</p>
-
-<h2>
-<a id="what-is-dockerized-mapreduce" class="anchor" href="#what-is-dockerized-mapreduce" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is "Dockerized MapReduce?"</h2>
-
-<p>The basic interface for MapReduce is a <code>map</code> function and a <code>reduce</code> function.
-In Hadoop this is exposed as a Java interface. In Pachyderm MapReduce jobs are
-user submitted Docker containers with http servers inside them. Rather than
-calling a <code>map</code> method on a class Pachyderm POSTs files to the <code>/map</code> route on
-a webserver. This completely democratizes MapReduce by decoupling it from a
-single platform such as the JVM.</p>
 
 <h2>
 <a id="whos-building-this" class="anchor" href="#whos-building-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>Who's building this?</h2>
