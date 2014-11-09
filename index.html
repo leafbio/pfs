@@ -110,11 +110,9 @@ available in the beta channel (CoreOS 444.5.0)</p>
 
 <p>SSH in to one of your new machines CoreOS machines.</p>
 
-<div class="highlight highlight-shell"><pre>$ wget https://github.com/pachyderm-io/pfs/raw/master/deploy/static/1Node.tar.gz</pre></div>
-
-<div class="highlight highlight-shell"><pre>$ tar -xvf 1Node.tar.gz</pre></div>
-
-<div class="highlight highlight-shell"><pre>$ fleetctl start 1Node/<span class="o">*</span></pre></div>
+<div class="highlight highlight-shell"><pre>$ wget https://github.com/pachyderm-io/pfs/raw/master/deploy/static/1Node.tar.gz
+$ tar -xvf 1Node.tar.gz
+$ fleetctl start 1Node/<span class="o">*</span></pre></div>
 
 <p>The startup process takes a little while the first time your run it because
 each node has to pull a Docker image.</p>
