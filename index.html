@@ -1,204 +1,64 @@
+---
+---
 <!DOCTYPE html>
-<html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ site.title }}</title>
+	<meta name="keywords" content="{{ site.keywords }}">
+	<meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="combo.css">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  {% if site.favicon %}<link rel="shortcut icon" href="{{ site.favicon }}" type="image/x-icon">{% endif %}
+	{% if site.touch_icon %}<link rel="apple-touch-icon" href="{{ site.touch_icon }}">{% endif %}
+</head>
+<body>
+  <div id="main">
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="pfs : A Dockerized distributed filesystem.">
+    <nav><ul>
+      {% for node in site.posts reversed %}
+        {% capture id %}{{ node.id | remove:'/' | downcase }}{% endcapture %}
+        <li class="p-{{id}}"><a href="#{{id}}">{{node.title}}</a></li>
+      {% endfor %}
+    </ul></nav>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>pfs</title>
-  </head>
+    {% for page in site.posts reversed %}
+      {% capture id %}{{ page.id | remove:'/' | downcase }}{% endcapture %}
+      <div id="{{id}}" class="section p-{{id}}">
+        {% if page.icon %}
+        <div class="subtlecircle sectiondivider imaged">
+          <img src="{{page.icon}}" alt="section icon" />
+          <h5 class="icon-title">{{ page.title }}</h5>
+        </div>
+        {% elsif page.fa-icon %}
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-{{ page.fa-icon }} fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">{{ page.title }}</h5>
+        </div>
+        {% endif %}
+        <div class="container {{ page.style }}">
+          {{ page.content }}
+        </div>
+      </div>
+    {% endfor %}
 
-  <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/pachyderm-io/pfs">View on GitHub</a>
-
-          <h1 id="project_title">pfs</h1>
-          <h2 id="project_tagline">A Dockerized distributed filesystem.</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/pachyderm-io/pfs/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/pachyderm-io/pfs/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+    <div id="footer" class="section text-white">
+      <div class="container">
+        {% capture foottext %} {% include footer.md %} {% endcapture %}
+        {{ foottext | markdownify }}
+      </div>
     </div>
+  </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="pachyderm-file-system" class="anchor" href="#pachyderm-file-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pachyderm File System</h1>
-
-<h2>
-<a id="what-is-pfs" class="anchor" href="#what-is-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is pfs?</h2>
-
-<p>Pfs is an HDFS alternative built specifically for the Docker ecosystem.
-You deploy it with Docker, just like everything else in your stack.
-Furthermore, MapReduce jobs are specified as Docker containers, rather than
-.jars, letting you perform distributed computation using any tools you want.</p>
-
-<h2>
-<a id="key-features" class="anchor" href="#key-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Key Features</h2>
-
-<ul>
-<li>Fault tolerant architecture built of CoreOS primitives</li>
-<li>Git like distributed filesystem</li>
-<li>Dockerized Map Reduce (not implemented)</li>
-</ul>
-
-<h2>
-<a id="is-pfs-production-ready" class="anchor" href="#is-pfs-production-ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Is pfs production ready</h2>
-
-<p>No, pfs is at Alpha status.</p>
-
-<h2>
-<a id="where-is-this-project-going" class="anchor" href="#where-is-this-project-going" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where is this project going?</h2>
-
-<p>Long term Pachyderm's goal is to be a viable alternative to Hadoop built on top
-of a modern distributed computing toolchain. Hadoop is a mature product so
-there's a great deal of work to be done to match its feature set. However we're
-finding that thanks to innovative tools like btrfs, Docker and CoreOS we can
-build more functionality with less code than was possible 10 years ago.</p>
-
-<h2>
-<a id="quickstart-guide" class="anchor" href="#quickstart-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
-
-<h3>
-<a id="creating-a-coreos-cluster" class="anchor" href="#creating-a-coreos-cluster" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a CoreOS cluster</h3>
-
-<p>Pfs is designed to run on CoreOS. To start you'll need a working CoreOS
-cluster. Currently global containers, which are required by pfs, are only
-available in the beta channel (CoreOS 444.5.0.)</p>
-
-<ul>
-<li>
-<a href="Vagrant">https://coreos.com/docs/running-coreos/platforms/vagrant/</a> (reccommended)</li>
-<li><a href="Google%20Compute%20Engine">https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/</a></li>
-<li><a href="Amazon%20EC2">https://coreos.com/docs/running-coreos/cloud-providers/ec2/</a></li>
-</ul>
-
-<h3>
-<a id="deploy-pfs" class="anchor" href="#deploy-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deploy pfs</h3>
-
-<p>SSH in to one of your new machines CoreOS machines.</p>
-
-<p><code>$ wget https://github.com/pachyderm-io/pfs/raw/master/deploy/static/1Node.tar.gz</code></p>
-
-<p><code>$ tar -xvf 1Node.tar.gz</code></p>
-
-<p><code>$ fleetctl start 1Node/*</code></p>
-
-<p>The startup process takes a little while the first time your run it because
-each node has to pull a Docker image.</p>
-
-<h3>
-<a id="checking-the-status-of-your-deploy" class="anchor" href="#checking-the-status-of-your-deploy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Checking the status of your deploy</h3>
-
-<p>The easiest way to see what's going on in your cluster is to use <code>list-units</code></p>
-
-<div class="highlight highlight-shell"><pre>$ fleetctl list-units</pre></div>
-
-<p>If things are working correctly you should see something like:</p>
-
-<pre><code>UNIT                            MACHINE                         ACTIVE  SUB
-announce-master-0-1.service     3817102d.../10.240.199.203      active  running
-announce-replica-0-1.service    3817102d.../10.240.199.203      active  running
-master-0-1.service              3817102d.../10.240.199.203      active  running
-replica-0-1.service             3817102d.../10.240.199.203      active  running
-router.service                  3817102d.../10.240.199.203      active  running
-</code></pre>
-
-<h3>
-<a id="using-pfs" class="anchor" href="#using-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using pfs</h3>
-
-<p>Pfs exposes a git like interface to the file system:</p>
-
-<h4>
-<a id="creating-a-file" class="anchor" href="#creating-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a file</h4>
-
-<div class="highlight highlight-shell"><pre>$ curl -XPOST localhost/pfs/file_name -d @local_file</pre></div>
-
-<h4>
-<a id="read-a-file" class="anchor" href="#read-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Read a file</h4>
-
-<div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name</pre></div>
-
-<h4>
-<a id="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h4>
-
-<div class="highlight highlight-shell"><pre>$ curl -XPUT localhost/pfs/file_name -d @local_file</pre></div>
-
-<h4>
-<a id="deleting-a-file" class="anchor" href="#deleting-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting a file</h4>
-
-<div class="highlight highlight-shell"><pre>$ curl -XDELETE localhost/pfs/file_name</pre></div>
-
-<h4>
-<a id="committing-changes" class="anchor" href="#committing-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Committing changes</h4>
-
-<div class="highlight highlight-shell"><pre>$ curl localhost/commit</pre></div>
-
-<p>Committing in pfs creates a lightweight snapshot of the file system state and
-pushes it to replicas. Where it remains accessible by commit id.</p>
-
-<h3>
-<a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
-
-<div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name<span class="o">?</span>commit=n</pre></div>
-
-<h2>
-<a id="what-is-a-git-like-filesystem" class="anchor" href="#what-is-a-git-like-filesystem" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a git like filesystem?</h2>
-
-<p>Pfs is implemented as a distributed layer on top of btrfs, the same
-copy-on-write(CoW) filesystem that powers Docker. A distributed layer that
-horizontally scales btrfs' existing
-<a href="git-like">http://zef.me/6023/who-needs-git-when-you-got-zfs/</a> semantics to
-datacenter scale datasets. Pfs brings features like commit based history and
-branching, standard primitives for collaborating on code, data engineering.</p>
-
-<h2>
-<a id="what-is-dockerized-mapreduce" class="anchor" href="#what-is-dockerized-mapreduce" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is "Dockerized MapReduce?"</h2>
-
-<p>The basic interface for MapReduce is a <code>map</code> function and a <code>reduce</code> function.
-In Hadoop this is exposed as a Java interface. In Pachyderm MapReduce jobs are
-user submitted Docker containers with http servers inside them. Rather than
-calling a <code>map</code> method on a class Pachyderm POSTs files to the <code>/map</code> route on
-a webserver. This completely democratizes MapReduce by decoupling it from a
-single platform such as the JVM.</p>
-
-<h2>
-<a id="whos-building-this" class="anchor" href="#whos-building-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>Who's building this?</h2>
-
-<p>2 guys who love data and communities. Both of whom are named Joe. We'd love
-to chat: <a href="mailto:joey.zwicker@gmail.com">joey.zwicker@gmail.com</a> <a href="mailto:jdoliner@gmail.com">jdoliner@gmail.com</a>.</p>
-
-<h2>
-<a id="how-do-i-hack-on-pfs" class="anchor" href="#how-do-i-hack-on-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>How do I hack on pfs?</h2>
-
-<p>Pfs' only dependency is Docker. You can build it like so:</p>
-
-<div class="highlight highlight-shell"><pre>pfs$ docker build -t username/pfs <span class="nf">.</span></pre></div>
-
-<p>Deploying what you build requires pushing the built container to the central
-Docker registry and changing the container name in the .service files from
-<code>pachyderm/pfs</code> to <code>username/pfs</code>.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">pfs maintained by <a href="https://github.com/pachyderm-io">pachyderm-io</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+{% include analytics.html %}
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="site.js"></script>
 </html>
