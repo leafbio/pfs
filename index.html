@@ -46,27 +46,25 @@ letting you perform distributed computation using any tools you want.</p>
 <h2>
 <a id="key-features" class="anchor" href="#key-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Key Features</h2>
 
-<p><em>TODO</em> make these clickable to lower sections</p>
-
 <ul>
 <li>Fault-tolerant architecture built on <a href="https://coreos.com">CoreOS</a> (implemented)</li>
-<li>Git-like distributed file system (implemented)</li>
-<li>Dockerized MapReduce (not implemented)</li>
+<li>
+<a href="#what-is-a-git-like-file-system">Git-like distributed file system</a> (implemented)</li>
+<li>
+<a href="#what-is-dockerized-mapreduce">Dockerized MapReduce</a> (not implemented)</li>
 </ul>
 
 <h2>
 <a id="is-pfs-production-ready" class="anchor" href="#is-pfs-production-ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Is pfs production ready</h2>
 
-<p>No, pfs is at Alpha status.</p>
+<p>No, pfs is at Alpha status. <a href="#how-do-i-hack-on-pfs">We'd love your help. :)</a></p>
 
 <h2>
 <a id="where-is-this-project-going" class="anchor" href="#where-is-this-project-going" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where is this project going?</h2>
 
-<p>Pachyderm will eventually be a complete replacement for Hadoop built on top of
+<p>Pachyderm will eventually be a complete replacement for Hadoop, built on top of
 a modern toolchain instead of the JVM. Hadoop is a mature ecosystem, so there's
-a long way to go for pfs to fully match its featureset. However we're finding
-that thanks to innovative tools like btrfs, Docker, and CoreOS, we can build an
-order of magnitude more functionality with much less code.</p>
+a long way to go before pfs will fully match its feature set. However, thanks to innovative tools like btrfs, Docker, and CoreOS, we can build an order of magnitude more functionality with much less code.</p>
 
 <h2>
 <a id="what-is-a-git-like-file-system" class="anchor" href="#what-is-a-git-like-file-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a "git-like file system"?</h2>
@@ -74,35 +72,33 @@ order of magnitude more functionality with much less code.</p>
 <p>Pfs is implemented as a distributed layer on top of btrfs, the same
 copy-on-write file system that powers Docker. Btrfs already offers
 <a href="http://zef.me/6023/who-needs-git-when-you-got-zfs/">git-like semantics</a> on a
-single machine pfs scales these out to a cluster. This allows features such as:</p>
+single machine and pfs scales these out to an entire cluster. This allows features such as:</p>
 
 <ul>
-<li>commit based history: File systems are generally single-state entities. Pfs,
+<li>Commit based history: File systems are generally single-state entities. Pfs,
 on the other hand, provides a rich history of every previous state of your
 cluster. You can always revert to a prior commit in the event of a
 disaster.</li>
-<li>branching: Thanks to btrfs' copy-on-write semantics branching is ridiculously
-cheap in pfs. Each user can have an independant branch to experiment in without
-affect anyone else. Branches can later be shared with others through merging.</li>
-<li>cloning: Btrfs' send/receive functionality allow pfs to efficiently transfer
-a cluster's worth of data to another cluster while maintaining its commit history.</li>
+<li>Branching: Thanks to btrfs's copy-on-write semantics, branching is ridiculously
+cheap in pfs. Each user can experience freeling in their own branch without
+impacting anyone else or the underlying data. Branches can easily be merged back in the main cluster.</li>
+<li>Cloning: Btrfs's send/receive functionality allows pfs to efficiently copy
+a entire cluster's worth of data while still maintaining its commit history.</li>
 </ul>
 
 <h2>
 <a id="what-is-dockerized-mapreduce" class="anchor" href="#what-is-dockerized-mapreduce" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is "dockerized MapReduce?"</h2>
 
 <p>The basic interface for MapReduce is a <code>map</code> function and a <code>reduce</code> function.
-In Hadoop this is exposed as a Java interface. In Pachyderm MapReduce jobs are
-user submitted Docker containers with http servers inside them. Rather than
-calling a <code>map</code> method on a class Pachyderm POSTs files to the <code>/map</code> route on
+In Hadoop this is exposed as a Java interface. In Pachyderm, MapReduce jobs are
+user-submitted Docker containers with http servers inside them. Rather than
+calling a <code>map</code> method on a class, Pachyderm POSTs files to the <code>/map</code> route on
 a webserver. This completely democratizes MapReduce by decoupling it from a
-single platform such as the JVM.</p>
+single platform, such as the JVM.</p>
 
-<p>A low cost to integrating external libraries greatly increases the scope of
-problems MapReduce can solve. For example suppose you want to perform computer
-vision on a large set of images. Creating a job that does this is as simple as
-running <code>npm install opencv</code> inside a container and creating a node.js server
-which uses this library on its <code>/map</code> route.</p>
+<p>Thanks to Docker, Pachyderm can seemlessly integrate external libraries. For example, suppose you want to perform computer
+vision on a large set of images. Creating this job is as simple as
+running <code>npm install opencv</code> inside a Docker container and creating a node.js server, which uses this library on its <code>/map</code> route.</p>
 
 <h2>
 <a id="quickstart-guide" class="anchor" href="#quickstart-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
@@ -110,7 +106,7 @@ which uses this library on its <code>/map</code> route.</p>
 <h3>
 <a id="creating-a-coreos-cluster" class="anchor" href="#creating-a-coreos-cluster" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a CoreOS cluster</h3>
 
-<p>Pfs is designed to run on CoreOS. To start you'll need a working CoreOS
+<p>Pfs is designed to run on CoreOS. To start, you'll need a working CoreOS
 cluster. Currently global containers, which are required by pfs, are only
 available in the beta channel (CoreOS 444.5.0)</p>
 
@@ -130,7 +126,7 @@ available in the beta channel (CoreOS 444.5.0)</p>
 $ tar -xvf 1Node.tar.gz
 $ fleetctl start 1Node/<span class="o">*</span></pre></div>
 
-<p>The startup process takes a little while the first time your run it because
+<p>The startup process takes a little while the first time you run it because
 each node has to pull a Docker image.</p>
 
 <h3>
@@ -140,7 +136,7 @@ each node has to pull a Docker image.</p>
 
 <div class="highlight highlight-shell"><pre>$ fleetctl list-units</pre></div>
 
-<p>If things are working correctly you should see something like:</p>
+<p>If things are working correctly, you should see something like:</p>
 
 <pre><code>UNIT                            MACHINE                         ACTIVE  SUB
 announce-master-0-1.service     3817102d.../10.240.199.203      active  running
@@ -153,7 +149,7 @@ router.service                  3817102d.../10.240.199.203      active  running
 <h3>
 <a id="using-pfs" class="anchor" href="#using-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using pfs</h3>
 
-<p>Pfs exposes a git like interface to the file system:</p>
+<p>Pfs exposes a git-like interface to the file system:</p>
 
 <h4>
 <a id="creating-a-file" class="anchor" href="#creating-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a file</h4>
@@ -161,7 +157,7 @@ router.service                  3817102d.../10.240.199.203      active  running
 <div class="highlight highlight-shell"><pre>$ curl -XPOST localhost/pfs/file_name -d @local_file</pre></div>
 
 <h4>
-<a id="read-a-file" class="anchor" href="#read-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Read a file</h4>
+<a id="reading-a-file" class="anchor" href="#reading-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading a file</h4>
 
 <div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name</pre></div>
 
@@ -181,7 +177,7 @@ router.service                  3817102d.../10.240.199.203      active  running
 <div class="highlight highlight-shell"><pre>$ curl localhost/commit</pre></div>
 
 <p>Committing in pfs creates a lightweight snapshot of the file system state and
-pushes it to replicas. Where it remains accessible by commit id.</p>
+pushes it to replicas, where it remains accessible by a commit id.</p>
 
 <h3>
 <a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
@@ -191,13 +187,13 @@ pushes it to replicas. Where it remains accessible by commit id.</p>
 <h2>
 <a id="whos-building-this" class="anchor" href="#whos-building-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>Who's building this?</h2>
 
-<p>2 guys who love data and communities. Both of whom are named Joe. We'd love
+<p>Two guys who love data and communities and both happen to be named Joe. We'd love
 to chat: <a href="mailto:joey.zwicker@gmail.com">joey.zwicker@gmail.com</a> <a href="mailto:jdoliner@gmail.com">jdoliner@gmail.com</a>.</p>
 
 <h2>
 <a id="how-do-i-hack-on-pfs" class="anchor" href="#how-do-i-hack-on-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>How do I hack on pfs?</h2>
 
-<p>Pfs' only dependency is Docker. You can build it like so:</p>
+<p>Pfs's only dependency is Docker. You can build it with:</p>
 
 <div class="highlight highlight-shell"><pre>pfs$ docker build -t username/pfs <span class="nf">.</span></pre></div>
 
