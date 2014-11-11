@@ -72,18 +72,18 @@ a long way to go before pfs will fully match its feature set. However, thanks to
 <p>Pfs is implemented as a distributed layer on top of btrfs, the same
 copy-on-write file system that powers Docker. Btrfs already offers
 <a href="http://zef.me/6023/who-needs-git-when-you-got-zfs/">git-like semantics</a> on a
-single machine and pfs scales these out to an entire cluster. This allows features such as:</p>
+single machine; pfs scales these out to an entire cluster. This allows features such as:</p>
 
 <ul>
-<li>Commit based history: File systems are generally single-state entities. Pfs,
+<li>Commit-based history: File systems are generally single-state entities. Pfs,
 on the other hand, provides a rich history of every previous state of your
 cluster. You can always revert to a prior commit in the event of a
 disaster.</li>
 <li>Branching: Thanks to btrfs's copy-on-write semantics, branching is ridiculously
-cheap in pfs. Each user can experience freeling in their own branch without
+cheap in pfs. Each user can experiment freely in their own branch without
 impacting anyone else or the underlying data. Branches can easily be merged back in the main cluster.</li>
 <li>Cloning: Btrfs's send/receive functionality allows pfs to efficiently copy
-a entire cluster's worth of data while still maintaining its commit history.</li>
+an entire cluster's worth of data while still maintaining its commit history.</li>
 </ul>
 
 <h2>
@@ -96,7 +96,7 @@ calling a <code>map</code> method on a class, Pachyderm POSTs files to the <code
 a webserver. This completely democratizes MapReduce by decoupling it from a
 single platform, such as the JVM.</p>
 
-<p>Thanks to Docker, Pachyderm can seemlessly integrate external libraries. For example, suppose you want to perform computer
+<p>Thanks to Docker, Pachyderm can seamlessly integrate external libraries. For example, suppose you want to perform computer
 vision on a large set of images. Creating this job is as simple as
 running <code>npm install opencv</code> inside a Docker container and creating a node.js server, which uses this library on its <code>/map</code> route.</p>
 
