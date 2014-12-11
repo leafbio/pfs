@@ -32,6 +32,56 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
+<a id="whats-new-in-v02" class="anchor" href="#whats-new-in-v02" aria-hidden="true"><span class="octicon octicon-link"></span></a>What's new in v0.2?</h1>
+
+<h2>
+<a id="branching" class="anchor" href="#branching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Branching</h2>
+
+<p>Pfs's branches are conceptually similar to git's. Here's an example of how to
+use them:</p>
+
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Create a new branch my-branch from commit d1938eea-cce6-4eca-b30c-ab6ead04c180.</span>
+$ curl -XPOST pfs/branch<span class="pl-k">?</span>commit=d1938eea-cce6-4eca-b30c-ab6ead04c180<span class="pl-k">&amp;</span>branch=my-branch
+<span class="pl-c"># Write my-file to my-branch</span>
+$ curl -XPUT pfs/file/my-file<span class="pl-k">?</span>branch=my-branch -d @local_file
+<span class="pl-c"># Commit my-branch</span>
+$ curl -XPOST pfs/commit<span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+79a0247c-d6b5-4aea-ac4d-84627c5f3eb6
+<span class="pl-c"># You can read from my-branch's commits just like master's</span>
+$ curl -XGET pfs/file/my-file<span class="pl-k">?</span>commit=79a0247c-d6b5-4aea-ac4d-84627c5f3eb6</pre></div>
+
+<p>Pfs currently doesn't have an analog to git's merge. We're discussing what that
+might look like in <a href="https://github.com/pachyderm-io/pfs/issues/16">#16</a>.</p>
+
+<h2>
+<a id="more-restful-api" class="anchor" href="#more-restful-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>More RESTful API</h2>
+
+<p>Pfs's API now consists of 3 RESTful endpoints which correspond to pfs's core
+primitives.</p>
+
+<ul>
+<li>
+<code>/file</code> (was <code>/pfs</code>)</li>
+<li><code>/commit</code></li>
+<li><code>/branch</code></li>
+</ul>
+
+<p><a href="pfs#using-pfs">Full API documentation.</a></p>
+
+<p>This API is also being discussed in <a href="https://github.com/pachyderm-io/pfs/issues/18">#18</a></p>
+
+<h2>
+<a id="test-and-benchmark-suite" class="anchor" href="#test-and-benchmark-suite" aria-hidden="true"><span class="octicon octicon-link"></span></a>Test and Benchmark Suite</h2>
+
+<p>Much needed repayment of some technical debt. Pfs now has an integrated test
+and benchmark suite. Currently it ships in the same image as pfs.</p>
+
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Run the test suite</span>
+docker run -ti pachyderm/pfs pfs-test
+<span class="pl-c"># Run the benchmark suite</span>
+docker run -ti pachyderm/pfs pfs-bench</pre></div>
+
+<h1>
 <a id="pachyderm-file-system" class="anchor" href="#pachyderm-file-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pachyderm File System</h1>
 
 <h2>
@@ -104,7 +154,7 @@ running <code>npm install opencv</code> inside a Docker container and creating a
 <a id="quickstart-guide" class="anchor" href="#quickstart-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Guide</h2>
 
 <p>The easiest way to try out pfs is to point curl at the live instance we have
-running here: 146.148.77.106. We'll try to keep it up and running throughout
+running here: <a href="http://release.pachyderm.io">http://release.pachyderm.io</a>. We'll try to keep it up and running throughout
 the day.</p>
 
 <h3>
@@ -145,9 +195,7 @@ each node has to pull a Docker image.</p>
 
 <pre><code>UNIT                            MACHINE                         ACTIVE  SUB
 announce-master-0-1.service     3817102d.../10.240.199.203      active  running
-announce-replica-0-1.service    3817102d.../10.240.199.203      active  running
 master-0-1.service              3817102d.../10.240.199.203      active  running
-replica-0-1.service             3817102d.../10.240.199.203      active  running
 router.service                  3817102d.../10.240.199.203      active  running
 </code></pre>
 
@@ -157,43 +205,50 @@ router.service                  3817102d.../10.240.199.203      active  running
 <p>Pfs exposes a git-like interface to the file system:</p>
 
 <h4>
-<a id="creating-a-file" class="anchor" href="#creating-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a file</h4>
+<a id="creating-files" class="anchor" href="#creating-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating files</h4>
 
-<div class="highlight highlight-shell"><pre>$ curl -XPOST localhost/pfs/file_name -d @local_file</pre></div>
-
-<h4>
-<a id="reading-a-file" class="anchor" href="#reading-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading a file</h4>
-
-<div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name</pre></div>
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Write &lt;file&gt; to &lt;branch&gt;. Branch defaults to "master".</span>
+$ curl -XPOST pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;</span><span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span> -d @local_file</pre></div>
 
 <h4>
-<a id="creatingmodifying-a-file" class="anchor" href="#creatingmodifying-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating/modifying a file</h4>
+<a id="reading-files" class="anchor" href="#reading-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading files</h4>
 
-<div class="highlight highlight-shell"><pre>$ curl -XPUT localhost/pfs/file_name -d @local_file</pre></div>
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Read &lt;file&gt; from &lt;master&gt;.</span>
+$ curl pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;</span>
+<span class="pl-c"># Read all files in a &lt;directory&gt;.</span>
+$ curl pfs/file/<span class="pl-k">&lt;</span>directory<span class="pl-k">&gt;</span>/<span class="pl-k">*</span>
+<span class="pl-c"># Read &lt;file&gt; from &lt;commit&gt;.</span>
+$ curl pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;</span><span class="pl-k">?</span>commit=<span class="pl-k">&lt;</span>commit<span class="pl-k">&gt;</span></pre></div>
 
 <h4>
-<a id="deleting-a-file" class="anchor" href="#deleting-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting a file</h4>
+<a id="deleting-files" class="anchor" href="#deleting-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting files</h4>
 
-<div class="highlight highlight-shell"><pre>$ curl -XDELETE localhost/pfs/file_name</pre></div>
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Delete &lt;file&gt; from &lt;branch&gt;. Branch defaults to "master".</span>
+$ curl -XDELETE pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;</span><span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span></pre></div>
 
 <h4>
 <a id="committing-changes" class="anchor" href="#committing-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Committing changes</h4>
 
-<div class="highlight highlight-shell"><pre>$ curl localhost/commit</pre></div>
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Commit dirty changes to &lt;branch&gt;. Defaults to "master".</span>
+$ curl -XPOST pfs/commit<span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+<span class="pl-c"># Getting all commits.</span>
+$ curl -XGET pfs/commit</pre></div>
 
-<p>Committing in pfs creates a lightweight snapshot of the file system state and
-pushes it to replicas, where it remains accessible by a commit id.</p>
+<h4>
+<a id="branching-1" class="anchor" href="#branching-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Branching</h4>
 
-<h3>
-<a id="accessing-previous-commits" class="anchor" href="#accessing-previous-commits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing previous commits</h3>
-
-<div class="highlight highlight-shell"><pre>$ curl localhost/pfs/file_name<span class="pl-k">?</span>commit=n</pre></div>
+<div class="highlight highlight-shell"><pre><span class="pl-c"># Create &lt;branch&gt; from &lt;commit&gt;.</span>
+$ curl -XPOST pfs/branch<span class="pl-k">?</span>commit=<span class="pl-k">&lt;</span>commit<span class="pl-k">&gt;&amp;</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+<span class="pl-c"># Commit to &lt;branch&gt;</span>
+$ curl -XPOST pfs/commit<span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+<span class="pl-c"># Getting all branches.</span>
+$ curl -XGET pfs/branch</pre></div>
 
 <h2>
 <a id="whos-building-this" class="anchor" href="#whos-building-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>Who's building this?</h2>
 
 <p>Two guys who love data and communities and both happen to be named Joe. We'd love
-to chat: <a href="mailto:joey.zwicker@gmail.com">joey.zwicker@gmail.com</a> <a href="mailto:jdoliner@gmail.com">jdoliner@gmail.com</a>.</p>
+to chat: <a href="mailto:joey@pachyderm.io">joey@pachyderm.io</a> <a href="mailto:jdoliner@pachyderm.io">jdoliner@pachyderm.io</a>.</p>
 
 <h2>
 <a id="how-do-i-hack-on-pfs" class="anchor" href="#how-do-i-hack-on-pfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>How do I hack on pfs?</h2>
