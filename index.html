@@ -42,11 +42,14 @@ use them:</p>
 
 <div class="highlight highlight-shell"><pre><span class="pl-c"># Create a new branch my-branch from commit d1938eea-cce6-4eca-b30c-ab6ead04c180.</span>
 $ curl -XPOST pfs/branch<span class="pl-k">?</span>commit=d1938eea-cce6-4eca-b30c-ab6ead04c180<span class="pl-k">&amp;</span>branch=my-branch
+
 <span class="pl-c"># Write my-file to my-branch</span>
 $ curl -XPUT pfs/file/my-file<span class="pl-k">?</span>branch=my-branch -d @local_file
+
 <span class="pl-c"># Commit my-branch</span>
 $ curl -XPOST pfs/commit<span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
 79a0247c-d6b5-4aea-ac4d-84627c5f3eb6
+
 <span class="pl-c"># You can read from my-branch's commits just like master's</span>
 $ curl -XGET pfs/file/my-file<span class="pl-k">?</span>commit=79a0247c-d6b5-4aea-ac4d-84627c5f3eb6</pre></div>
 
@@ -78,6 +81,7 @@ and benchmark suite. Currently it ships in the same image as pfs.</p>
 
 <div class="highlight highlight-shell"><pre><span class="pl-c"># Run the test suite</span>
 docker run -ti pachyderm/pfs pfs-test
+
 <span class="pl-c"># Run the benchmark suite</span>
 docker run -ti pachyderm/pfs pfs-bench</pre></div>
 
@@ -215,8 +219,10 @@ $ curl -XPOST pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;
 
 <div class="highlight highlight-shell"><pre><span class="pl-c"># Read &lt;file&gt; from &lt;master&gt;.</span>
 $ curl pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;</span>
+
 <span class="pl-c"># Read all files in a &lt;directory&gt;.</span>
 $ curl pfs/file/<span class="pl-k">&lt;</span>directory<span class="pl-k">&gt;</span>/<span class="pl-k">*</span>
+
 <span class="pl-c"># Read &lt;file&gt; from &lt;commit&gt;.</span>
 $ curl pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&gt;</span><span class="pl-k">?</span>commit=<span class="pl-k">&lt;</span>commit<span class="pl-k">&gt;</span></pre></div>
 
@@ -231,6 +237,7 @@ $ curl -XDELETE pfs/file/<span class="pl-k">&lt;</span>file<span class="pl-k">&g
 
 <div class="highlight highlight-shell"><pre><span class="pl-c"># Commit dirty changes to &lt;branch&gt;. Defaults to "master".</span>
 $ curl -XPOST pfs/commit<span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+
 <span class="pl-c"># Getting all commits.</span>
 $ curl -XGET pfs/commit</pre></div>
 
@@ -239,8 +246,10 @@ $ curl -XGET pfs/commit</pre></div>
 
 <div class="highlight highlight-shell"><pre><span class="pl-c"># Create &lt;branch&gt; from &lt;commit&gt;.</span>
 $ curl -XPOST pfs/branch<span class="pl-k">?</span>commit=<span class="pl-k">&lt;</span>commit<span class="pl-k">&gt;&amp;</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+
 <span class="pl-c"># Commit to &lt;branch&gt;</span>
 $ curl -XPOST pfs/commit<span class="pl-k">?</span>branch=<span class="pl-k">&lt;</span>branch<span class="pl-k">&gt;</span>
+
 <span class="pl-c"># Getting all branches.</span>
 $ curl -XGET pfs/branch</pre></div>
 
