@@ -1,252 +1,77 @@
-## What is pfs?
-Pfs is a distributed file system built specifically for the Docker
-ecosystem. You [deploy it with Docker](https://registry.hub.docker.com/u/pachyderm/pfs/),
-just like other applications in your stack. Furthermore,
-MapReduce jobs are specified as Docker containers, rather than .jars,
-letting you perform distributed computation using any tools you want.
+<img src='doc/pachyderm_factory_gh.png' height='225' title='Pachyderm'> 
 
-## Key Features
-- Fault-tolerant architecture built on [CoreOS](https://coreos.com)
-- [Git-like distributed file system](#what-is-a-git-like-file-system)
-- [Dockerized MapReduce](#what-is-dockerized-mapreduce)
+[![GitHub release](https://img.shields.io/github/release/pachyderm/pachyderm.svg?style=flat-square)](https://github.com/pachyderm/pachyderm/releases)
+[![GitHub license](https://img.shields.io/badge/license-apache-blue.svg)](https://github.com/pachyderm/pachyderm/blob/master/LICENSE)
+[![GoDoc](https://godoc.org/github.com/pachyderm/pachyderm?status.svg)](https://godoc.org/github.com/pachyderm/pachyderm/src/client)
+[![Slack Status](http://slack.pachyderm.io/badge.svg)](http://slack.pachyderm.io)
 
-## Is pfs production ready
-No, pfs is at Alpha status. [We'd love your help. :)](#how-do-i-hack-on-pfs)
+# Pachyderm: A Containerized, Version-Controlled Data Lake
 
-## Where is this project going?
-Pachyderm will eventually be a complete replacement for Hadoop, built on top of
-a modern toolchain instead of the JVM. Hadoop is a mature ecosystem, so there's
-a long way to go before pfs will fully match its feature set. However, thanks to innovative tools like btrfs, Docker, and CoreOS, we can build an order of magnitude more functionality with much less code.
+Pachyderm is:
 
-## What is a "git-like file system"?
-Pfs is implemented as a distributed layer on top of btrfs, the same
-copy-on-write file system that powers Docker. Btrfs already offers
-[git-like semantics](http://zef.me/6023/who-needs-git-when-you-got-zfs/) on a
-single machine; pfs scales these out to an entire cluster. This allows features such as:
-- Commit-based history: File systems are generally single-state entities. Pfs,
-on the other hand, provides a rich history of every previous state of your
-cluster. You can always revert to a prior commit in the event of a
-disaster.
-- Branching: Thanks to btrfs's copy-on-write semantics, branching is ridiculously
-cheap in pfs. Each user can experiment freely in their own branch without
-impacting anyone else or the underlying data. Branches can easily be merged back in the main cluster.
-- Cloning: Btrfs's send/receive functionality allows pfs to efficiently copy
-an entire cluster's worth of data while still maintaining its commit history.
+* [Git for Data Science](http://pachyderm.io/pfs.html): Pachyderm offers complete version control for even the largest data sets.
+* [Containerized](http://pachyderm.io/pps.html): Pachyderm is built on Docker and Kubernetes. Since everything in Pachyderm is a container, data scientists can use any languages or libraries they want (e.g. R, Python, OpenCV, etc).
+* [Ideal for building machine learning pipelines and ETL workflows](http://pachyderm.io/pps.html): Pachyderm versions and tracks every output directly to the raw input datasets that created it (aka: [Provenance](http://pachyderm.readthedocs.io/en/latest/advanced/provenance.html)). 
 
-## What is "dockerized MapReduce?"
-The basic interface for MapReduce is a `map` function and a `reduce` function.
-In Hadoop this is exposed as a Java interface. In Pachyderm, MapReduce jobs are
-user-submitted Docker containers with http servers inside them. Rather than
-calling a `map` method on a class, Pachyderm POSTs files to the `/map` route on
-a webserver. This completely democratizes MapReduce by decoupling it from a
-single platform, such as the JVM.
+For more details, see [what's new about Pachyderm](https://github.com/pachyderm/pachyderm/#whats-new-about-pachyderm-how-is-it-different-from-hadoop).
 
-Thanks to Docker, Pachyderm can seamlessly integrate external libraries. For example, suppose you want to perform computer
-vision on a large set of images. Creating this job is as simple as
-running `npm install opencv` inside a Docker container and creating a node.js server, which uses this library on its `/map` route.
+## Getting Started
+[Install Pachyderm locally](http://pachyderm.readthedocs.io/en/latest/getting_started/local_installation.html) or [deploy on AWS/GCE/Azure](http://pachyderm.readthedocs.io/en/latest/deployment/deploy_intro.html) in about 5 minutes. 
 
-## Quickstart Guide
+You can also refer to our complete [developer docs](http://pachyderm.readthedocs.io/en/latest) to see tutorials, check out example projects, and learn about advanced features of Pachyderm.
 
-### Run Pachyderm locally on a small sample dataset
-```shell
-# launch a local pfs shard
-$ curl www.pachyderm.io/launch | sh
- 
-# clone the chess pipeline
-$ git clone https://github.com/pachyderm/chess.git && cd chess
- 
-# install the pipeline locally and run it
-$ install/pachyderm/local
-```
-####Step 1: Launch a local pfs shard 
-Download and run the Pachyderm launch script to get a local instance running.
-####Step 2: Clone the chess pipeline 
-Clone the chess git repo we’ve provided. You can check out the full map code on GitHub.
-####Step 3: Install the pipeline locally and run it 
-Run the local install script to start the pipeline. It should take around 6 minutes.
+If you'd like to see some examples and learn about core use cases for Pachyderm:
+- [Examples](http://pachyderm.readthedocs.io/en/latest/examples/readme.html)
+- [Use Cases](http://www.pachyderm.io/use_cases.html)
+- [Case Studies](http://www.pachyderm.io/usecases/generalfusion.html): Learn how [General Fusion](http://www.generalfusion.com/) uses Pachyderm to power commercial fusion research.
 
-### Creating a CoreOS cluster
-Pfs is designed to run on CoreOS. To start, you'll need a working CoreOS
-cluster. Here's links on how to set one up:
+## Documentation
 
-- [Google Compute Engine](https://coreos.com/docs/running-coreos/cloud-providers/google-compute-engine/) (recommended)
-- [Amazon EC2](https://coreos.com/docs/running-coreos/cloud-providers/ec2/)
-- [Vagrant](https://coreos.com/docs/running-coreos/platforms/vagrant/) (requires setting up DNS)
+[Official Documentation](http://pachyderm.readthedocs.io/en/latest/)
 
-### Deploy pfs
-SSH in to one of your new CoreOS machines.
+## What's new about Pachyderm? (How is it different from Hadoop?)
 
-```shell
-$ wget pachyderm.io/deploy/1Node.tar.gz
-$ tar -xvf 1Node.tar.gz
-$ fleetctl start 1Node/*
-```
+There are two bold new ideas in Pachyderm:
 
-The startup process takes a little while the first time you run it because
-each node has to pull a Docker image.
+- Containers as the core processing primitive
+- Version Control for data
 
-### Integrating with s3
-As of v0.4 pfs can leverage s3 as a source of data for MapReduce jobs. Pfs also
-uses s3 as the backend for its local Docker registry. To get s3 working you'll
-need to provide pfs with credentials by setting them in etcd like so:
+These ideas lead directly to a system that's much more powerful, flexible and easy to use. 
 
-```
-etcdctl set /pfs/creds/AWS_ACCESS_KEY_ID <AWS_ACCESS_KEY_ID>
-etcdctl set /pfs/creds/AWS_SECRET_ACCESS_KEY <AWS_SECRET_ACCESS_KEY>
-etcdctl set /pfs/creds/IMAGE_BUCKET <IMAGE_BUCKET>
-```
+To process data, you simply create a containerized program which reads and writes to the **local filesystem**. You can use _any_ tools you want because it's all just going in a container! Pachyderm will take your container and inject data into it. We'll then automatically replicate your container, showing each copy a different chunk of data. With this technique, Pachyderm can scale any code you write to process up to petabytes of data (Example: [distributed image processing](http://pachyderm.readthedocs.io/en/latest/getting_started/beginner_tutorial.html)).
 
-### Checking the status of your deploy
-The easiest way to see what's going on in your cluster is to use `list-units`,
-this is what a healthy 1 Node cluster looks like.
-```
-UNIT                            MACHINE                         ACTIVE          SUB
-announce-master-0-1.service     0b0625cf.../172.31.9.86         active          running
-announce-registry.service       0e7cf611.../172.31.27.115       active          running
-gitdaemon.service               0b0625cf.../172.31.9.86         active          running
-gitdaemon.service               0e7cf611.../172.31.27.115       active          running
-gitdaemon.service               ed618559.../172.31.9.87         active          running
-master-0-1.service              0b0625cf.../172.31.9.86         active          running
-registry.service                0e7cf611.../172.31.27.115       active          running
-router.service                  0b0625cf.../172.31.9.86         active          running
-router.service                  0e7cf611.../172.31.27.115       active          running
-router.service                  ed618559.../172.31.9.87         active          running
-```
-If you startup a new cluster and `registry.service` fails to start it's
-probably an issue with s3 credentials. See the section above.
+Pachyderm also version controls all data using a commit-based distributed
+filesystem (PFS), similar to what git does with code. Version control for data
+has far reaching consequences in a distributed filesystem. You get the full
+history of your data, can track changes, collaborate with teammates, and if
+anything goes wrong you can revert _the entire cluster_ with one click!
 
-### Using pfs
-Pfs exposes a git-like interface to the file system:
+Version control is also very synergistic with our containerized processing
+engine. Pachyderm understands how your data changes and thus, as new data
+is ingested, can run your workload on the _diff_ of the data rather than the
+whole thing. This means that there's no difference between a batched job and
+a streaming job, the same code will work for both!
 
-#### Creating files
-```shell
-# Write <file> to <branch>. Branch defaults to "master".
-$ curl -XPOST pfs/file/<file>?branch=<branch> -T local_file
-```
+## Community
+Keep up to date and get Pachyderm support via:
+- [Twitter](http://twitter.com/pachydermio)
+- [![Slack Status](http://slack.pachyderm.io/badge.svg)](http://slack.pachyderm.io) Join our community [Slack Channel](http://slack.pachyderm.io) to get help from the Pachyderm team and other users.
 
-#### Reading files
-```shell
-# Read <file> from <master>.
-$ curl pfs/file/<file>
+### Contributing
 
-# Read all files in a <directory>.
-$ curl pfs/file/<directory>/*
+To get started, sign the [Contributor License Agreement](https://pachyderm.wufoo.com/forms/pachyderm-contributor-license-agreement).
 
-# Read <file> from <commit>.
-$ curl pfs/file/<file>?commit=<commit>
-```
+You should also check out our [contributing guide](./contributing).
 
-#### Deleting files
-```shell
-# Delete <file> from <branch>. Branch defaults to "master".
-$ curl -XDELETE pfs/file/<file>?branch=<branch>
-```
+Send us PRs, we would love to see what you do! You can also check our GH issues for things labeled "noob-friendly" as a good place to start. We're sometimes bad about keeping that label up-to-date, so if you don't see any, just let us know. 
 
-#### Committing changes
-```shell
-# Commit dirty changes to <branch>. Defaults to "master".
-$ curl -XPOST pfs/commit?branch=<branch>
+### Join Us
 
-# Getting all commits.
-$ curl -XGET pfs/commit
-```
+WE'RE HIRING! Love Docker, Go and distributed systems? Learn more about [our team](http://www.pachyderm.io/jobs.html) and email us at jobs@pachyderm.io.
 
-#### Branching
-```shell
-# Create <branch> from <commit>.
-$ curl -XPOST pfs/branch?commit=<commit>&branch=<branch>
+## Usage Metrics
 
-# Commit to <branch>
-$ curl -XPOST pfs/commit?branch=<branch>
-
-# Getting all branches.
-$ curl -XGET pfs/branch
-```
-###MapReduce
-
-####Creating a new job descriptor
-
-Jobs are specified as JSON files in the following format:
-
-```
-{
-    "type"  : either "map" or "reduce"
-    "input" : a directory in pfs, S3 URL, or the output from another job
-    "image" : the Docker image to use 
-    "command" : the command to start your web server
-}
-```
-
-**NOTE**: You do not need to specify the output location for a job. The output of a job, often referred to as a _materialized view_, is automatically stored in pfs `/job/<jobname>`.
-
-####POSTing a job to pfs
-
-Post a local JSON file with the above format to pfs:
-
-```sh
-$ curl -XPOST <host>/job/<jobname> -T <localfile>.json
-```
-
-**NOTE**: POSTing a job doesn't run the job. It just records the specification of the job in pfs. 
-
-####Running a job
-Jobs are only run on a commit. That way you always know exactly the state of
-the file system that is used in a computation. To run all committed jobs, use
-the `commit` keyword with the `run` parameter.
-
-```sh
-$ curl -XPOST <host>/commit?run
-```
-
-Think of adding jobs as constructing a
-[DAG](http://en.wikipedia.org/wiki/Directed_acyclic_graph) of computations that
-you want performed. When you call `/commit?run`, Pachyderm automatically
-schedules the jobs such that a job isn't run until the jobs it depends on have
-completed.
-
-####Getting the output of a job
-Each job records its output in its own read-only file system. You can read the output of the job with:
-
-```sh
-$ curl <host>/job/<jobname>/file/*?commit=<commit>
-```
-or get just a specific file with:
-```sh
-$ curl -XGET <host>/job/<job>/file/*?commit=<commit>
-```
-
-**NOTE**: You must specify the commit you want to read from and that commit
-needs to have been created with the run parameter. We're planning to expand
-this API to make it not have this requirement in the near future.
-####Creating a job:
-
-
-#### Deleting jobs
-
-```shell
-# Delete <job>
-$ curl -XDELETE <host>/job/<job>
-```
-
-#### Getting the job descriptor
-
-```shell
-# Read <job>
-$ curl -XGET <host>/job/<job>
-```
-
-## Who's building this?
-Two guys who love data and communities and both happen to be named Joe. We'd love
-to chat: joey@pachyderm.io jdoliner@pachyderm.io.
-
-## How do I hack on pfs?
-You can run pfs locally using:
-
-```shell
-scripts/dev-launch
-```
-
-This will build a docker image from the working directory, tag it as `pfs` and
-launch it locally using `scripts/launch`.  The only dependencies are Docker >=
-1.5 and btrfs-tools >= 3.14. The script checks for this and gives you
-directions on how to fix it.
+Pachyderm automatically reports anonymized usage metrics. These metrics help us
+understand how people are using Pachyderm and make it better.  They can be
+disabled by setting the env variable `METRICS` to `false` in the pachd
+container.

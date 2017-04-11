@@ -1,3 +1,15 @@
+# For emacs partials
+*~
+*#*
+
+# For context helper script config
+.ctx
+
+# Build artifacts
+.goxc.json
+/protofix
+doc/_build
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
@@ -6,6 +18,7 @@
 # Folders
 _obj
 _test
+*.DS_Store
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -23,3 +36,15 @@ _testmain.go
 *.test
 
 *.swp
+*.swo
+
+_tmp
+etc/initdev/.vagrant
+src/cmd/pfs/pfs-roler
+src/cmd/pfs/pfs-volume-driver
+src/cmd/pfs/pfs
+src/cmd/pfsd/pfsd
+src/cmd/pps/pps
+src/cmd/ppsd/ppsd
+/.goxc.local.json
+/build/
